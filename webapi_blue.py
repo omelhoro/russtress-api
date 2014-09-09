@@ -8,7 +8,7 @@ def setup_rs(cl=Blueprint):
         simple_page = cl(__name__,template_folder='web')
         homeroute="/" 
     else:
-        simple_page = cl("rust",__name__,template_folder='web')
+        simple_page = cl("rust",__name__,static_folder='web',template_folder='web')
         homeroute="/rustress"
     @simple_page.route(homeroute)
     def rustress():
