@@ -17,11 +17,14 @@ def setup_rs(cl=Blueprint):
     try:
         set_stress,pm=setup_stress("./rustress/dict_data")
     except:
-        set_stress,pm=setup_stress("./dict_data")
+        try:
+            set_stress,pm=setup_stress("./dict_data")
+        except:
+            set_stress,pm=setup_stress("./mysite/rustress/dict_data")
 
     @simple_page.route("/stress")
     def stress():
-        return json.dumps({k:list(set_stress(pm,k)) for k,v in request.args.items()})
+        return json.dumps({k:list(set_stress(pm,k.decode("utf8"))) for k,v in request.args.items()})
     return simple_page
 
 if __name__ == "__main__": 
