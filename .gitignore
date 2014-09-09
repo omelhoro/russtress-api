@@ -2,3 +2,5 @@ classifiers/
 corp_data/
 corp_tools/
 evaluation/
+*.swp
+*.pyc
