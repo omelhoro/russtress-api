@@ -2,10 +2,14 @@ from flask import Flask,Blueprint, render_template, abort,request
 from jinja2 import TemplateNotFound
 from setstress import setup_stress
 import json
+import sys
+reload(sys)
+sys.setdefaultencoding("utf8")
+
 
 def setup_rs(cl=Blueprint):
     if cl==Flask:
-        simple_page = cl(__name__,template_folder='web')
+        simple_page = cl(__name__,static_folder='web',template_folder='web')
         homeroute="/" 
     else:
         simple_page = cl("rust",__name__,static_folder='web',template_folder='web')
