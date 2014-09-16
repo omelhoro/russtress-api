@@ -40,22 +40,25 @@ def setup_stress(data_path="./dict_data"):
     bl_dct=csv_dct("%s/biglit_sr.csv" %data_path)
     def set_stress(fn,w):
         w=w.lower()
-        vows= RUS_VOWELS_re.findall(w)
+        vows= RUS_VOWELS_re.findall(w) #look if word has russian vowels -> seed out the one syllables
         if not vows:
             return {998}
-        if u"ё" in vows:
-            return {vows.index(u"ё")+1}
         if len(vows)==1:
             return {1}
         try:
-            res={int(x) for x in stss_df[w].split("|") if x}
-        except KeyError:
-            #conv.get account for bug
-            lemmas=fn(w)
-            res=set()
-            for l in lemmas:
-                # print w,l
-                lres={int(x) for x in comp_df.get(l,bl_dct.get(l,"999")).split("|") if x and x!='None'}
-                res=res.union(lres)
-        return res
+            return {vows.index(u"ё")+1} #jo is always stressed
+        except ValueError:
+            try:
+                res={int(x) for x in stss_df[w].split("|") if x} #first try the tokens db
+            except KeyError:
+                #conv.get account for bug
+                lemmas=fn(w) #now lemmatize with the function
+                res=reduce(
+                        lambda a,l: a.union(
+                            {int(x) for x in
+                            comp_df.get(l,bl_dct.get(l,"999")).split("|") 
+                            if x and x!='None'}),
+                        lemmas,
+                        set())
+            return res
     return set_stress,pm_setup()
