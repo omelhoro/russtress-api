@@ -1,7 +1,7 @@
 $=jQuery
 
 set_stress =  (t,cl) ->
-    split_t=t.split(/([,.;!?() ])/g)
+    split_t=(w for w in t.split(/([\u2000-\u206F\u2E00-\u2E7F\'!\"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~ \n])/g) when w)
     RUS_VOWELS=/[`иеаоуяюыёэ]/gi
     d={}
     for itm in split_t
@@ -18,19 +18,29 @@ set_stress =  (t,cl) ->
                 else
                     m
             return f_r
-
+        # console.log d
         stress= (w) ->
             try
-                nth=d[w][0]
-                return w.replace(RUS_VOWELS,f_replace(nth))
+                entry=d[w]
+                nth=entry[0][0]
+                info=entry[0][1]
+                count=if entry.length==1  then "one" else "more"
+                stressed= w.replace(RUS_VOWELS,f_replace(nth))
+                t="<span class='#{info} #{count}'>#{stressed}</span>"
+                r=[stressed,t]
             catch e
-                return w
+                r= [w,w]
+            # console.log r
+            return r
         outp=(stress(w) for w in split_t)
         cl(outp))
 
 ($ '#go_stress').click( (e) ->
     t=($ '#stress_text').val()
     append_text = (outp) ->
-        ($ '#output_stress').val(outp.join(""))
+        concat=(w[0] for w in outp).join("")
+        with_info=$("<div>"+(w[1] for w in outp).join("")+"</div>")
+        ($ '#output_stress').val(concat)
+        ($ "#stress-info").html(with_info)
     set_stress(t,append_text)
 )

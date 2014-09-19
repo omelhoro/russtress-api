@@ -17,6 +17,16 @@
 body{
 	background-color: transparent;
 	}
+.lem-stress {
+    border: 1px solid black;
+    }
+    .tok-stress {
+        border: 1px dashed black;
+    }
+    .not-found{background-color: grey; }
+    .more{
+        background-color: lightgreen;
+    }
 	</style>
 		<div class='container'>
 		<div>
@@ -30,6 +40,8 @@ body{
 			<button id='go_stress' class='btn convert btn-block'>Go!</button>
 			</div>
 			<div class='col-md-5'>
+                <p><span class='not-found'>Grey</span> background means that a word wasnt found in Database. <span class='more'>Green</span> means that a word has more than one possibility - the first was chosen. <span class='tok-stress'>Dashed border</span> means that the stress was found by the token. <span class='lem-stress'>Solid border</span> means that a word was found by the lemma.</p>
+            <div id='stress-info'></div>
 			<textarea id='output_stress' class='form-control' cols="10" rows="30"></textarea>
 			</div>
 			</div>
