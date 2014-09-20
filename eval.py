@@ -46,9 +46,6 @@ def run_ruscorpora(fact=0.5):
             lambda x: x['tok_stress'] in list(x['guessed_stress'])[:1] if x['tok_stress']!=997 else True,axis=1)
     # mk1_df['iseq']=mk1_df.apply(
     #         lambda x: x['tok_stress'] in x['guessed_stress'] if x['tok_stress']!=997 else True,axis=1)
-    v=pd.DataFrame(mk1_df['type_guess'].value_counts())
-    v["ratio"]=v[0]/len(mk1_df)
-    print v
     print("Tokens ratio:")
     print mk1_df['iseq'].value_counts().div(len(mk1_df))
 
@@ -56,6 +53,18 @@ def run_ruscorpora(fact=0.5):
     types_df=mk1_df.drop_duplicates('token')
     print types_df['iseq'].value_counts().div(len(types_df))
     types_df[types_df['iseq']==False].to_csv("corp_data/falses.csv",encoding="utf8")
+    return mk1_df
+
+def type_stress(df):
+    # v=pd.DataFrame(df['type_guess'].value_counts())
+    # v["ratio"]=v[0]/len(df)
+    gr=df.groupby(["type_guess",'iseq'])["tok_stress"].count().unstack()
+    gr_ratio=gr.div(gr.sum(axis=1),axis=0)
+    print gr,gr_ratio,gr.join(gr_ratio,lsuffix="_total",rsuffix="_ratio")
+    return gr
+df=run_ruscorpora(0.02)
+type_stats=type_stress(df)
+
 
 if __name__=="__main__":
     import sys
@@ -66,6 +75,7 @@ if __name__=="__main__":
                 raise ValueError
         else:
             fact=0.5
-        run_ruscorpora(fact)
+        df=run_ruscorpora(fact)
+        gr=type_stress(df)
     except ValueError:
         print("Factor value is not valid: Choose something between 0.0 and 1.0")
