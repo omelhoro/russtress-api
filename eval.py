@@ -42,7 +42,7 @@ def run_ruscorpora(fact=0.5):
     mk1_df['guessed_stress']=mk1_df['token'].map(lambda x: set(map_stress[x][0])) 
     mk1_df['type_guess']=mk1_df['token'].map(lambda x: map_stress[x][1]) 
     mk1_df['tok_stress']= mk1_df['token'].apply(find_stss_syl)
-    mk1_df['iseq']=mk1_df.apply(
+    mk1_df['iseq']=mk1_df[mk1_df.tok_stress!=997].apply(
             lambda x: x['tok_stress'] in list(x['guessed_stress'])[:1] if x['tok_stress']!=997 else True,axis=1)
     # mk1_df['iseq']=mk1_df.apply(
     #         lambda x: x['tok_stress'] in x['guessed_stress'] if x['tok_stress']!=997 else True,axis=1)
@@ -60,9 +60,10 @@ def type_stress(df):
     # v["ratio"]=v[0]/len(df)
     gr=df.groupby(["type_guess",'iseq'])["tok_stress"].count().unstack()
     gr_ratio=gr.div(gr.sum(axis=1),axis=0)
-    print gr,gr_ratio,gr.join(gr_ratio,lsuffix="_total",rsuffix="_ratio")
-    return gr
-df=run_ruscorpora(0.02)
+    ratio_total=gr.join(gr_ratio,lsuffix="_total",rsuffix="_ratio")
+    print gr,ratio_total
+    return ratio_total
+df=run_ruscorpora(0.5)
 type_stats=type_stress(df)
 
 
