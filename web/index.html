@@ -25,10 +25,11 @@ body{
     }
     .not-found{background-color: grey; }
     .more{
-        background-color: lightgreen;
+        background-color: darkgoldenrod;
     }
 	</style>
 		<div class='container'>
+            <p>This app sets stress marks in Russian texts. It isn't 100% correct, but at least 96%. Follow the development and view benchmarks at <a href=https://github.com/omelhoro/rustress>here</a></p>
 		<div>
 			<div class='row'>
 			<div class='col-md-5'>
@@ -40,7 +41,7 @@ body{
 			<button id='go_stress' class='btn convert btn-block'>Go!</button>
 			</div>
 			<div class='col-md-5'>
-                <p><span class='not-found'>Grey</span> background means that a word wasnt found in Database. <span class='more'>Green</span> means that a word has more than one possibility - the first was chosen. <span class='tok-stress'>Dashed border</span> means that the stress was found by the token. <span class='lem-stress'>Solid border</span> means that a word was found by the lemma.</p>
+                <p><span class='not-found'>Grey</span> background means that a word wasnt found in Database. <span class='more'>This color</span> means that a word has more than one possibility - the first was chosen. <span class='tok-stress'>Dashed border</span> means that the stress was found by the token. <span class='lem-stress'>Solid border</span> means that a word was found by the lemma.</p>
             <div id='stress-info'></div>
 			<textarea id='output_stress' class='form-control' cols="10" rows="30"></textarea>
 			</div>
