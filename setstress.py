@@ -10,9 +10,18 @@ import os
 
 print(os.getcwd())
 
+def parse_string_stress(k,s):
+    splitted=s.split("|")
+    try:
+        res=tuple([int(x) for x in splitted])
+    except ValueError:
+        print k,s,splitted
+        res=()
+    return res
+
 def csv_dct(fl):
     with open(fl) as f:
-        return {l[0].decode("utf8"):l[1] for l in csv.reader(f)}
+        return {l[0].decode("utf8"):parse_string_stress(l[0],l[1]) for l in csv.reader(f)}
 #%timeit d = csv_dct("dict_data/lem_df.csv")
 #%timeit d1 = pd.read_csv("dict_data/lem_df.csv",encoding = "utf8",index_col = 0,squeeze = True).to_dict()
 
@@ -30,9 +39,9 @@ def pm_setup():
 # stss_df = pd.read_csv("dict_data/tok_df.csv",index_col = 0, encoding = "utf8",squeeze = True).to_dict()
 # # jo_sr = pd.read_csv("dict_data/jo_sr.csv",encoding = "utf8",index_col = 0,squeeze = True).to_dict()
 # bl_dct = pd.read_csv("dict_data/biglit_sr.csv",encoding = "utf8",index_col = 0,squeeze = True).to_dict()
-NO_VOWS = {(998,"no-vows")}
-NOT_FOUND = "999" #string because of split
-ONE_VOW = {(1,"one-vow")}
+NO_VOWS = 998
+NOT_FOUND = 999 #string because of split
+ONE_VOW = 1
 RUS_VOWELS = u"[`иеаоуяюыёэ]"
 RUS_VOWELS_re = re.compile(RUS_VOWELS)
 def setup_stress(data_path = "./dict_data",exclude = ()):
@@ -48,26 +57,24 @@ def setup_stress(data_path = "./dict_data",exclude = ()):
         w = w.lower()
         vows =  RUS_VOWELS_re.findall(w) #look if word has russian vowels -> seed out the one syllables
         if not vows:
-            return NO_VOWS
+            return { ( NO_VOWS,"no-vows" ) }
         if len(vows) ==1:
-            return ONE_VOW
+            return { ( ONE_VOW,"one-vow" ) }
         try:
             return {(vows.index(u"ё")+1,"jo-stress")} #jo is always stressed
         except ValueError:
             try:
-                res={(int(x),"tok-stress") for x in stss_df[w].split("|") if x} #first try the tokens db
+                res={(x,"tok-stress") for x in stss_df[w]} #first try the tokens db
             except KeyError:
                 #conv.get account for bug
                 lemmas=fn(w) #now lemmatize with the function
                 res=reduce(
                         lambda a,l: a.union(
-                            {(int(x),"lem-stress") for x in
-                            comp_df.get(l,bl_dct.get(l,NOT_FOUND)).split("|") 
-                            if x and x!='None'}),
+                            {(x,"lem-stress") for x in
+                            comp_df.get(l,bl_dct.get(l,NOT_FOUND))}),
                         lemmas,
                         set())
-                if len(res) and (int(NOT_FOUND),"lem-stress") in res:
-                    return {(int(NOT_FOUND),"not-found")}
+                if len(res) and (NOT_FOUND,"lem-stress") in res:
+                    return {(NOT_FOUND,"not-found")}
             return res
     return set_stress,pm_setup()
-
