@@ -61,4 +61,5 @@ $("#go_stress").click(function () {
 $("#show-more").click(function (evt) {
     $("#more-info").toggle("fast");
 });
+window['STRESS'] = true;
 //# sourceMappingURL=stress.js.map

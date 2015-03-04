@@ -79,3 +79,5 @@ $("#go_stress").click(()=> {
 $("#show-more").click((evt:Event)=>{
 $("#more-info").toggle("fast")
 })
+
+window['STRESS']=true
