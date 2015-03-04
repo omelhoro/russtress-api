@@ -75,3 +75,7 @@ $("#go_stress").click(()=> {
 
     setStress(t, append_text)
 });
+
+$("#show-more").click((evt:Event)=>{
+$("#more-info").toggle("fast")
+})
