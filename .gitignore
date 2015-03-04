@@ -4,3 +4,5 @@ corp_tools/
 evaluation/
 *.swp
 *.pyc
+.idea
+*.map
