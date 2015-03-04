@@ -1,14 +1,18 @@
 from flask import Flask, Blueprint, render_template, request
-from setstress import setup_stress
+try:
+    from .setstress import setup_stress
+except SystemError:
+    from setstress import setup_stress
+
 import json
 
 
-def setup_rs(cl):
+def setup_rs(cl=None):
     if cl == Flask:
         simple_page = Flask(__name__)
         homeroute = "/"
     else:
-        simple_page = Blueprint("rust")
+        simple_page = Blueprint("rust",__name__,template_folder='templates')
         homeroute = "/rustress"
 
     @simple_page.route(homeroute)
@@ -32,5 +36,5 @@ def setup_rs(cl):
 
 if __name__ == "__main__":
     app = setup_rs(Flask)
-    app.debug = True
+    #app.debug = True
     app.run()
