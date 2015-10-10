@@ -26,7 +26,7 @@ def setup_rs(cl=None):
     except (IOError):
         try:
             set_stress, pm = setup_stress("./dict_data")
-        except FileNotFoundError:
+        except (IOError):
             set_stress, pm = setup_stress("./mysite/rustress/dict_data")
 
     @simple_page.route("/stress")
