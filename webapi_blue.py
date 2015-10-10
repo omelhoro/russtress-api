@@ -32,9 +32,8 @@ def setup_rs(cl=None):
         return json.dumps({k: list(set_stress(pm, k)) for k, v in request.args.items()})
 
     return simple_page
-  
 
 if __name__ == "__main__":
     app = setup_rs(Flask)
     #app.debug = True
-    app.run(host='0.0.0.0', port=5001)
+    app.run(host='0.0.0.0')
