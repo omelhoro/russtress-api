@@ -21,7 +21,7 @@ RUN apt-get install -y tar git curl nano wget dialog net-tools build-essential
 # Install Python and Basic Python Tools
 RUN apt-get install -y python python-dev python-distribute python-pip
 
-RUN git clone https://github.com/omelhoro/rustress
+RUN git clone https://github.com/omelhoro/rustress /russtress
 
 # Get pip to download and install requirements:
 RUN pip install -r /russtress/requirements.txt
