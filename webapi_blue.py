@@ -3,6 +3,8 @@ try:
     from .setstress import setup_stress
 except SystemError:
     from setstress import setup_stress
+except ValueError:
+    from setstress import setup_stress
 
 import json
 
@@ -21,7 +23,7 @@ def setup_rs(cl=None):
 
     try:
         set_stress, pm = setup_stress("./rustress/dict_data")
-    except FileNotFoundError:
+    except (IOError):
         try:
             set_stress, pm = setup_stress("./dict_data")
         except FileNotFoundError:
