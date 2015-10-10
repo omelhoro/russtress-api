@@ -24,13 +24,13 @@ RUN apt-get install -y python python-dev python-distribute python-pip
 RUN git clone https://github.com/omelhoro/rustress
 
 # Get pip to download and install requirements:
-RUN pip install -r /rustress/requirements.txt
+RUN pip install -r /russtress/requirements.txt
 
 # Expose ports
 EXPOSE 5001
 
 # Set the default directory where CMD will execute
-WORKDIR /rustress
+WORKDIR /russtress
 
 # Set the default command to execute
 # when creating a new container
