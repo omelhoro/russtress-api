@@ -38,4 +38,4 @@ def setup_rs(cl=None):
 if __name__ == "__main__":
     app = setup_rs(Flask)
     #app.debug = True
-    app.run(host='0.0.0.0')
+    app.run()
