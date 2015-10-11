@@ -27,7 +27,7 @@ RUN git clone https://github.com/omelhoro/rustress /russtress
 RUN pip install -r /russtress/requirements.txt
 
 # Expose ports
-EXPOSE 5001
+EXPOSE 5000
 
 # Set the default directory where CMD will execute
 WORKDIR /russtress
