@@ -29,13 +29,18 @@ def setup_rs(cl=None):
         except (IOError):
             set_stress, pm = setup_stress("./mysite/rustress/dict_data")
 
-    @simple_page.route("/stress")
+    @simple_page.route("/stress/", methods = ["POST"])
     def stress():
-        return json.dumps({k: list(set_stress(pm, k)) for k, v in request.args.items()})
+        data = request.data.decode("utf8")
+        jsn = json.loads(data)["words"]
+        print("Request", jsn)
+        out = json.dumps({k: list(set_stress(pm, k)) for k in jsn})
+        print(out)
+        return out
 
     return simple_page
 
 if __name__ == "__main__":
     app = setup_rs(Flask)
     #app.debug = True
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=5001)
