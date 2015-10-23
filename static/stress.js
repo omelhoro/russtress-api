@@ -1,14 +1,15 @@
 var RUS_VOWELS = /[`иеаоуяюыёэ]/gi;
 function setStress(t, insertFn) {
-    var split_t = t.split(/([\u2000-\u206F\u2E00-\u2E7F\'!\"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~ \n])/g).filter(Boolean);
-    var d = {};
+    var split_t = t.split(/([\u2000-\u206F\u2E00-\u2E7F\'!\"#\$%&\(\)\*\+,\-\.\/:;<=>\?@\[\]\^_`\{\|\}~ \n])/g)
+        .filter(Boolean);
+    var d = [];
     split_t.forEach(function (itm) {
         var vows = itm.match(RUS_VOWELS);
         if (vows !== null && vows.length > 1) {
-            d[itm] = "";
+            d.push(itm);
         }
     });
-    $.getJSON("/stress", d, function (d) {
+    function cb(d) {
         function fReplace(nth, i) {
             if (i === void 0) { i = 0; }
             //wrapper for setting the right vowel-number for replacing; JS-replace iterates over findings and calls inner fn
@@ -45,7 +46,17 @@ function setStress(t, insertFn) {
         }
         var outp = split_t.map(stress);
         insertFn(outp);
-    });
+    }
+    var xhr = {
+        type: 'POST',
+        url: '/stress/',
+        dataType: 'json',
+        contentType: 'application/json',
+        processData: false,
+        data: JSON.stringify({ words: d }),
+        success: cb
+    };
+    $.ajax(xhr);
 }
 $("#go_stress").click(function () {
     var t = $("#stress_text").val();
@@ -62,4 +73,3 @@ $("#show-more").click(function (evt) {
     $("#more-info").toggle("fast");
 });
 window['STRESS'] = true;
-//# sourceMappingURL=stress.js.map
