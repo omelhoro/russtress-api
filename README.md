@@ -1,5 +1,6 @@
 Rustress is an app to set stress marks in russian words.
 
+
 ###Approach
 It depends on pymorphy2 since it takes a different approach to the stress-problem:
 Some apps use a complete dictionary of word forms to merge them with the occurences in the text.
