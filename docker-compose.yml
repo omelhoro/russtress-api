@@ -1,0 +1,25 @@
+version: '2'
+services:
+  russtress-client:
+    image: omelhoro1/russtress-client
+    container_name: russtress-client
+    # ports:
+    #   - "5000:5000"
+    environment:
+      - VIRTUAL_HOST=russtress.igor-fischer.rocks
+      - LETSENCRYPT_HOST=russtress.igor-fischer.rocks
+      - VIRTUAL_NETWORK=proxy-tier
+      - VIRTUAL_PORT=5000
+      - LETSENCRYPT_EMAIL=fischerig@outlook.com
+      - SET_STRESS_API=http://russtress-api:5001
+    networks:
+      - proxy-tier
+  russtress-api:
+    image: omelhoro1/russtress-api
+    container_name: russtress-api
+    networks:
+      - proxy-tier
+
+networks:
+  proxy-tier:
+    external: true
