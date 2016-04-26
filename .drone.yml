@@ -9,7 +9,7 @@ deploy:
     target: /tmp/$$COMMIT/
     delete: false
     commands:
-      - docker-compose -f /tmp/$$COMMIT/docker-compose.yml up -d
+      - docker-compose -f /tmp/$$COMMIT/docker-compose.yml up -d -p russtress-web
     when:
       branch: master
 
