@@ -3,6 +3,7 @@ services:
   russtress-client:
     image: omelhoro1/russtress-client
     container_name: russtress-client
+    restart: unless-stopped
     # ports:
     #   - "5000:5000"
     environment:
@@ -17,6 +18,7 @@ services:
   russtress-api:
     image: omelhoro1/russtress-api
     container_name: russtress-api
+    restart: unless-stopped
     networks:
       - proxy-tier
 
