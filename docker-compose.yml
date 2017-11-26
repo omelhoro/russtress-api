@@ -1,20 +1,19 @@
 version: '2'
 services:
+
   russtress-client:
     image: omelhoro1/russtress-client
     container_name: russtress-client
     restart: unless-stopped
     # ports:
     #   - "5000:5000"
+    labels:
+      - "traefik.frontend.rule=Host:russtress.igor-fischer.rocks,russtress.fischerops.com"
     environment:
-      - VIRTUAL_HOST=russtress.igor-fischer.rocks,russtress.fischerops.com
-      - LETSENCRYPT_HOST=russtress.igor-fischer.rocks,russtress.fischerops.com
-      - VIRTUAL_NETWORK=proxy-tier
-      - VIRTUAL_PORT=5000
-      - LETSENCRYPT_EMAIL=fischerig@outlook.com
       - SET_STRESS_API=http://russtress-api:5001
     networks:
       - proxy-tier
+
   russtress-api:
     image: omelhoro1/russtress-api
     container_name: russtress-api

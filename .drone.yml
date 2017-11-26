@@ -1,6 +1,6 @@
-build:
-  image: clojure
-deploy:
+
+pipeline:
+
   rsync:
     user: $$PROD_USER
     host: $$PROD_HOST
@@ -14,12 +14,28 @@ deploy:
     when:
       branch: master
 
-publish:
   docker:
-    username: $$DOCKER_USERNAME
-    password: $$DOCKER_PASSWORD
-    email: $$DOCKER_EMAIL
+    image: plugins/docker
     storage_driver: vfs
     repo: omelhoro1/russtress-api
+    secrets: [ docker_username, docker_password ]
+    when:
+      branch: master
+
+  deploy:
+    image: drillster/drone-rsync
+    user: captain
+    hosts: [ "igor-fischer.rocks" ]
+    port: 22
+    target: /tmp/russtress-web-${DRONE_COMMIT}/
+    include:
+      - "docker-compose.yml"
+    exclude:
+      - "**.*"
+    delete: false
+    secrets: [ rsync_key ]
+    script:
+      - docker-compose -f /tmp/russtress-web-${DRONE_COMMIT}/docker-compose.yml pull
+      - docker-compose -f /tmp/russtress-web-${DRONE_COMMIT}/docker-compose.yml -p russtress-web up -d
     when:
       branch: master
