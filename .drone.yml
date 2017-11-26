@@ -1,19 +1,6 @@
 
 pipeline:
 
-  rsync:
-    user: $$PROD_USER
-    host: $$PROD_HOST
-    port: 22
-    source: ./docker-compose.yml
-    target: /tmp/$$COMMIT/
-    delete: false
-    commands:
-      - docker-compose -f /tmp/$$COMMIT/docker-compose.yml pull
-      - docker-compose -f /tmp/$$COMMIT/docker-compose.yml -p russtress-web up -d
-    when:
-      branch: master
-
   docker:
     image: plugins/docker
     storage_driver: vfs
