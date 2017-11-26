@@ -1,10 +1,5 @@
 from flask import Flask, Blueprint, render_template, request
-try:
-    from .setstress import setup_stress
-except SystemError:
-    from setstress import setup_stress
-except ValueError:
-    from setstress import setup_stress
+from setstress import setup_stress
 
 import json
 # from flask.ext.cors import CORS
